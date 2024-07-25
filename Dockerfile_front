@@ -1,0 +1,29 @@
+FROM node:latest
+
+RUN apt update
+
+RUN apt install -y git && apt install -y default-jre
+
+COPY ./front/docker-entrypoint.sh /
+
+RUN chmod +x /docker-entrypoint.sh
+
+RUN apt-get update
+RUN apt update && apt install -y vim
+
+WORKDIR /app
+
+COPY ./front/package*.json ./
+RUN npm install
+
+COPY ./front .
+
+EXPOSE 3000
+
+# set timezone
+RUN rm /etc/localtime
+RUN ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
+RUN dpkg-reconfigure -f noninteractive tzdata
+
+# RUN /docker-entrypoint.sh
+CMD ["npm", "start"]

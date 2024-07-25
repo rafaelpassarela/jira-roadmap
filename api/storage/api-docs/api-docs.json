@@ -1,0 +1,1816 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Roadmap for Jira API",
+        "description": "Endpoint mapping for Roadmap for Jira App.",
+        "contact": {
+            "email": "contact@mrrafael.ca"
+        },
+        "version": "2.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3030",
+            "description": "Server"
+        }
+    ],
+    "paths": {
+        "/api/v1/test": {
+            "get": {
+                "tags": [
+                    "Test"
+                ],
+                "summary": "API Communication Test, should return a JSON",
+                "description": "Returns a simple Ok message for API Connectivity test.",
+                "operationId": "TestApi",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the test message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/TestModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/codelogin": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "description": "Performs user login based on the code sent by email. Returns authentication data in case of success",
+                "operationId": "CodeLogin",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CodeLoginParam"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object with access token data",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/TokenResult"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized. Invalid access code",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/whoami": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "description": "Returns the data of the user identified by the bearerAuth token.",
+                "operationId": "WhoAmI",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object with user data",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/UserModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorMessageModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/validate": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "description": "Returns 200 for a valid token, otherwise 401.",
+                "operationId": "ValidateToken",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorMessageModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/config/get": {
+            "post": {
+                "tags": [
+                    "Config"
+                ],
+                "description": "Returns a list with the requested configuration values.",
+                "operationId": "GetConfigList",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GetConfigParam"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object with the list of configurations",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ConfigList"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/api/v1/config/get/{id}": {
+            "post": {
+                "tags": [
+                    "Config"
+                ],
+                "description": "Returns the requested configuration values. Note that if the ID field returns 0 (zero), it indicates that the configuration <b>was not found</b>.",
+                "operationId": "GetConfig",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Parameter referring to the configuration ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object with the configuration item",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ConfigItem"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/api/v1/issue/find": {
+            "put": {
+                "tags": [
+                    "Issue"
+                ],
+                "description": "Load a List of Issues objects for current user.",
+                "operationId": "findIssues",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FindIssueModel"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Issue list loaded successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing a list of Issues",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/IssueModelList"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/issue/{guid}/add": {
+            "post": {
+                "tags": [
+                    "Issue"
+                ],
+                "description": "Add an Issue to a Roadmap.",
+                "operationId": "addIssue",
+                "parameters": [
+                    {
+                        "name": "guid",
+                        "in": "path",
+                        "description": "GUID of the Roadmap",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "6c71d92e-1af3-4597-a51c-e7689334b7ab"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IssueModel"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Issue added successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the Issue added to the Roadmap",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/IssueModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/issue/{guid}/remove": {
+            "delete": {
+                "tags": [
+                    "Issue"
+                ],
+                "description": "Remove an Issue from Roadmap.",
+                "operationId": "removeIssue",
+                "parameters": [
+                    {
+                        "name": "guid",
+                        "in": "path",
+                        "description": "GUID of the Roadmap",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "6c71d92e-1af3-4597-a51c-e7689334b7ab"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Issue Key",
+                    "required": true,
+                    "content": {
+                        "text/plain": {
+                            "schema": {
+                                "type": "string",
+                                "example": "ABC-1234"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/issue/{guid}/update": {
+            "put": {
+                "tags": [
+                    "Issue"
+                ],
+                "description": "Update the Start and End date of a Roadmap Issue, and vertical pos.",
+                "operationId": "updateIssue",
+                "parameters": [
+                    {
+                        "name": "guid",
+                        "in": "path",
+                        "description": "GUID of the Roadmap",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "6c71d92e-1af3-4597-a51c-e7689334b7ab"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateIssueModel"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Issue added successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the Issue added to the Roadmap",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/IssueModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/project/config": {
+            "get": {
+                "tags": [
+                    "Project"
+                ],
+                "description": "Load a List of Projcts config objects.",
+                "operationId": "getProjects",
+                "responses": {
+                    "200": {
+                        "description": "Project config list loaded successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing a list of Projects configs",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ProjectConfigModelList"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Project"
+                ],
+                "description": "Save the project param.",
+                "operationId": "saveProject",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProjectConfigModel"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Project config saved.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the saved project config",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ProjectConfigModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Project"
+                ],
+                "description": "Remove the project param.",
+                "operationId": "removeProject",
+                "requestBody": {
+                    "description": "Project Key",
+                    "required": true,
+                    "content": {
+                        "text/plain": {
+                            "schema": {
+                                "type": "string",
+                                "example": "ABC"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dash": {
+            "put": {
+                "tags": [
+                    "Roadmap"
+                ],
+                "description": "Load a List of Roadmaps objects for current user.",
+                "operationId": "getDash",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DashParamsModel"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Roadmap list loaded successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing a list of Roadmaps",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/RoadmapModelList"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/roadmap/": {
+            "post": {
+                "tags": [
+                    "Roadmap"
+                ],
+                "description": "Create or update a Roadmap object.",
+                "operationId": "SaveRoadmap",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RoadmapModel"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Roadmap created successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the saved Roadmap",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/RoadmapModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/roadmap/{guid}/{itens}": {
+            "get": {
+                "tags": [
+                    "Roadmap"
+                ],
+                "description": "Load a Roadmap object by GUID.",
+                "operationId": "LoadRoadmap",
+                "parameters": [
+                    {
+                        "name": "guid",
+                        "in": "path",
+                        "description": "GUID of the Roadmap",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "6c71d92e-1af3-4597-a51c-e7689334b7ab"
+                        }
+                    },
+                    {
+                        "name": "itens",
+                        "in": "path",
+                        "description": "Load the Roadmap with the list of Issues (0-false/1-true).",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": "1"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Roadmap created successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the Roadmap identified by the GUID",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/RoadmapModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/roadmap/{guid}/sync": {
+            "put": {
+                "tags": [
+                    "Roadmap"
+                ],
+                "description": "Synchronize Roadmap Issues with Jira (send Start/End date, get Issue details).",
+                "operationId": "syncRoadmapIssues",
+                "parameters": [
+                    {
+                        "name": "guid",
+                        "in": "path",
+                        "description": "GUID of the Roadmap",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "6c71d92e-1af3-4597-a51c-e7689334b7ab"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Roadmap created successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the Roadmap identified by the GUID",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/RoadmapModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/roadmap/share": {
+            "put": {
+                "tags": [
+                    "Roadmap"
+                ],
+                "description": "Share the current roadmap with a new user by email.",
+                "operationId": "Share",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddShareParam"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object with all shared users",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ShareModelList"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Roadmap"
+                ],
+                "description": "Remove the shared user from current roadmap by user email.",
+                "operationId": "RemoveShare",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RemoveShareParam"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object with all shared users",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ShareModelList"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/validate": {
+            "put": {
+                "tags": [
+                    "User"
+                ],
+                "description": "If found, returns the username associated with the provided username.",
+                "operationId": "Validate",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserValidationParam"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object with user's name and avatar",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/UserValidationResult"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/sendcode": {
+            "put": {
+                "tags": [
+                    "User"
+                ],
+                "description": "Generates an authentication code for the specified user.",
+                "operationId": "SendCode",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SendCodeParam"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/removeTokenJira": {
+            "delete": {
+                "tags": [
+                    "User"
+                ],
+                "description": "Remove o token Jira cadastrado para o usuário logado.",
+                "operationId": "RemoveTokenJira",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Não autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "Objeto JSON contendo a mensagem de erro",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorMessageModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "Objeto JSON contendo a mensagem de erro",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/configTokenJira": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "description": "Configures a new Jira token for the logged-in user. v4",
+                "operationId": "ConfigTokenJira",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "text/plain": {
+                            "schema": {
+                                "type": "string",
+                                "example": "6c71d92e-1af3-4597-a51c-e7689334b7ab"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorMessageModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "405": {
+                        "description": "Method Not Allowed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "description": "JSON object containing the error message",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ErrorModel"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "TestModel": {
+                "required": [
+                    "code",
+                    "message",
+                    "timestamp"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "integer"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "timestamp": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "UserModel": {
+                "required": [
+                    "guid",
+                    "name",
+                    "avatarUrl",
+                    "email",
+                    "jira_accountType",
+                    "token_jira"
+                ],
+                "properties": {
+                    "guid": {
+                        "type": "string",
+                        "example": "6c71d92e-1af3-4597-a51c-e7689334b7ab"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "John Smith"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "john.smith@mybigcompany.com"
+                    },
+                    "avatarUrl": {
+                        "type": "string",
+                        "example": "https://r2.1k-cdn.com/sig/size:256/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fyazarlar%2F513202_c27ea_1586708018.jpg"
+                    },
+                    "jira_accountType": {
+                        "type": "string",
+                        "example": "local"
+                    },
+                    "has_jira_token": {
+                        "type": "boolean",
+                        "example": "true"
+                    },
+                    "token_jira": {
+                        "type": "string",
+                        "example": "ATATT****************************************A764C"
+                    }
+                },
+                "type": "object"
+            },
+            "CodeLoginParam": {
+                "required": [
+                    "email",
+                    "code"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "example": "john.smith@mybigcompany.com"
+                    },
+                    "code": {
+                        "type": "string",
+                        "example": "123456"
+                    }
+                },
+                "type": "object"
+            },
+            "TokenResult": {
+                "required": [
+                    "access_token",
+                    "token_type",
+                    "user"
+                ],
+                "properties": {
+                    "access_token": {
+                        "type": "string",
+                        "example": "12|RSqHCNuHuWpzYTCWdwX9xsWYtufGsr8UlBQq8hMs1e3f7e34"
+                    },
+                    "token_type": {
+                        "type": "string",
+                        "example": "Bearer"
+                    },
+                    "expiration": {
+                        "type": "string",
+                        "example": "2024-02-23T10:03:26Z"
+                    },
+                    "user": {
+                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/UserModel"
+                            }
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "GetConfigParam": {
+                "required": [
+                    "idList"
+                ],
+                "properties": {
+                    "idList": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "example": [
+                            1,
+                            2,
+                            3
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "ConfigList": {
+                "properties": {
+                    "list": {
+                        "type": "array",
+                        "items": {
+                            "oneOf": [
+                                {
+                                    "$ref": "#/components/schemas/ConfigItem"
+                                }
+                            ]
+                        },
+                        "example": [
+                            {
+                                "id": "1",
+                                "key": "CONFIG_ENUM_NAME",
+                                "value": "xyz"
+                            },
+                            {
+                                "id": "5",
+                                "key": "OTHER_ENUM_NAME",
+                                "value": "1056"
+                            }
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "ConfigItem": {
+                "required": [
+                    "id",
+                    "key",
+                    "value"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "key": {
+                        "type": "string",
+                        "example": "CONFIG_ENUM_NAME"
+                    },
+                    "value": {
+                        "type": "string",
+                        "example": "abc xyz"
+                    }
+                },
+                "type": "object"
+            },
+            "FindIssueModel": {
+                "required": [
+                    "guid",
+                    "filter",
+                    "subTasks"
+                ],
+                "properties": {
+                    "guid": {
+                        "type": "string",
+                        "example": "455bbfd4-abcd-1234-8345-2d29d164699b"
+                    },
+                    "filter": {
+                        "type": "string",
+                        "example": "project in (TES, ABC) or Key = XYZ-123"
+                    },
+                    "subTasks": {
+                        "type": "boolean",
+                        "example": "true"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateIssueModel": {
+                "required": [
+                    "key",
+                    "top",
+                    "left",
+                    "width"
+                ],
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "example": "ABC-1234"
+                    },
+                    "top": {
+                        "type": "number",
+                        "example": "250"
+                    },
+                    "left": {
+                        "type": "number",
+                        "example": "10"
+                    },
+                    "width": {
+                        "type": "number",
+                        "example": "150"
+                    }
+                },
+                "type": "object"
+            },
+            "IssueModel": {
+                "required": [
+                    "keyJira",
+                    "summary",
+                    "status",
+                    "assignee",
+                    "startDate",
+                    "endDate",
+                    "issueType",
+                    "icoUrl",
+                    "issueUrl",
+                    "left",
+                    "top",
+                    "width",
+                    "css",
+                    "exists"
+                ],
+                "properties": {
+                    "keyJira": {
+                        "type": "string",
+                        "example": "ABC-123"
+                    },
+                    "summary": {
+                        "type": "string",
+                        "example": "Check the new feature"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "To Do"
+                    },
+                    "assignee": {
+                        "type": "string",
+                        "example": "John Wick"
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "example": "2024-01-15"
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "example": "2024-01-20"
+                    },
+                    "issueType": {
+                        "type": "string",
+                        "example": "Task"
+                    },
+                    "icoUrl": {
+                        "type": "string",
+                        "example": "https://jira.com/ico.png"
+                    },
+                    "issueUrl": {
+                        "type": "string",
+                        "example": "https://jira.com/ABC-123"
+                    },
+                    "left": {
+                        "type": "number",
+                        "example": "175"
+                    },
+                    "top": {
+                        "type": "number",
+                        "example": "250"
+                    },
+                    "width": {
+                        "type": "number",
+                        "example": "145"
+                    },
+                    "css": {
+                        "type": "string",
+                        "example": "done"
+                    },
+                    "exists": {
+                        "type": "boolean",
+                        "example": "true"
+                    }
+                },
+                "type": "object"
+            },
+            "IssueModelList": {
+                "required": [
+                    "list"
+                ],
+                "properties": {
+                    "list": {
+                        "type": "array",
+                        "items": {
+                            "oneOf": [
+                                {
+                                    "$ref": "#/components/schemas/IssueModel"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "ProjectConfigModel": {
+                "required": [
+                    "projectKey",
+                    "startDate",
+                    "dueDate"
+                ],
+                "properties": {
+                    "projectKey": {
+                        "type": "string",
+                        "example": "ABC"
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "example": "customfield_123"
+                    },
+                    "dueDate": {
+                        "type": "string",
+                        "example": "customfield_456"
+                    }
+                },
+                "type": "object"
+            },
+            "ProjectConfigModelList": {
+                "required": [
+                    "list"
+                ],
+                "properties": {
+                    "list": {
+                        "type": "array",
+                        "items": {
+                            "oneOf": [
+                                {
+                                    "$ref": "#/components/schemas/ProjectConfigModel"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "RoadmapModel": {
+                "required": [
+                    "guid",
+                    "name",
+                    "description",
+                    "start_date",
+                    "end_date",
+                    "active",
+                    "shares"
+                ],
+                "properties": {
+                    "guid": {
+                        "type": "string",
+                        "example": "6c71d92e-1af3-4597-a51c-e7689334b7ab"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "July 2024 - Roadmap"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "This is a test description"
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "example": "2024-07-01"
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "example": "2024-07-31"
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "example": "true"
+                    },
+                    "level": {
+                        "description": "0 - Owner, 1 - Editor, 2 - Viewer",
+                        "type": "integer",
+                        "example": "0"
+                    },
+                    "issues": {
+                        "type": "array",
+                        "items": {
+                            "oneOf": [
+                                {
+                                    "$ref": "#/components/schemas/IssueModel"
+                                }
+                            ]
+                        }
+                    },
+                    "shares": {
+                        "type": "array",
+                        "items": {
+                            "oneOf": [
+                                {
+                                    "$ref": "#/components/schemas/ShareModel"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "RoadmapModelList": {
+                "properties": {
+                    "list": {
+                        "type": "array",
+                        "items": {
+                            "oneOf": [
+                                {
+                                    "$ref": "#/components/schemas/RoadmapModel"
+                                }
+                            ]
+                        },
+                        "example": [
+                            {
+                                "guid": "6c71d92e-1af3-4597-a51c-e7689334b7ab",
+                                "name": "July 2024 - Roadmap",
+                                "description": "This is a test description",
+                                "start_date": "2024-07-01",
+                                "end_date": "2024-07-31",
+                                "active": true
+                            },
+                            {
+                                "guid": "6c71d92e-1af3-4597-a51c-e7689334b7ab",
+                                "name": "July 2024 - Roadmap",
+                                "description": "This is a test description",
+                                "start_date": "2024-07-01",
+                                "end_date": "2024-07-31",
+                                "active": true
+                            }
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "DashParamsModel": {
+                "required": [
+                    "filter"
+                ],
+                "properties": {
+                    "filter": {
+                        "required": [
+                            "active"
+                        ],
+                        "properties": {
+                            "active": {
+                                "description": "0 - Inactive, 1 - Active, 2 - All",
+                                "type": "integer",
+                                "example": "0"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "AddShareParam": {
+                "required": [
+                    "guid",
+                    "email",
+                    "readOnly"
+                ],
+                "properties": {
+                    "guid": {
+                        "type": "string",
+                        "example": "455bbfd4-abcd-1234-8345-2d29d164699b"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "john@test.com"
+                    },
+                    "readOnly": {
+                        "type": "boolean",
+                        "example": "true"
+                    }
+                },
+                "type": "object"
+            },
+            "RemoveShareParam": {
+                "required": [
+                    "guid",
+                    "email"
+                ],
+                "properties": {
+                    "guid": {
+                        "type": "string",
+                        "example": "455bbfd4-abcd-1234-8345-2d29d164699b"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "john@test.com"
+                    }
+                },
+                "type": "object"
+            },
+            "ShareModel": {
+                "required": [
+                    "id",
+                    "read_only",
+                    "user_email"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "3"
+                    },
+                    "read_only": {
+                        "type": "integer",
+                        "example": "0"
+                    },
+                    "user_email": {
+                        "type": "string",
+                        "example": "john@test.com"
+                    }
+                },
+                "type": "object"
+            },
+            "ShareModelList": {
+                "required": [
+                    "list"
+                ],
+                "properties": {
+                    "list": {
+                        "type": "array",
+                        "items": {
+                            "oneOf": [
+                                {
+                                    "$ref": "#/components/schemas/ShareModel"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "UserValidationParam": {
+                "required": [
+                    "userName"
+                ],
+                "properties": {
+                    "userName": {
+                        "type": "string",
+                        "example": "john.smith"
+                    }
+                },
+                "type": "object"
+            },
+            "SendCodeParam": {
+                "required": [
+                    "email"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "example": "john.smith@mybigcompany.com"
+                    }
+                },
+                "type": "object"
+            },
+            "UserValidationResult": {
+                "required": [
+                    "name",
+                    "avatarUrl",
+                    "email"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "John Smith"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "john.smith@mybigcompany.com"
+                    },
+                    "avatarUrl": {
+                        "type": "string",
+                        "example": "https://r2.1k-cdn.com/sig/size:256/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fyazarlar%2F513202_c27ea_1586708018.jpg"
+                    }
+                },
+                "type": "object"
+            },
+            "ErrorModel": {
+                "required": [
+                    "code",
+                    "error"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "example": "42S22"
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": "Error message"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Complementary Error message"
+                    }
+                },
+                "type": "object"
+            },
+            "ErrorMessageModel": {
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Unauthenticated"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "bearerAuth",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "security": [
+        {
+            "bearerAuth": []
+        }
+    ],
+    "externalDocs": {
+        "description": "Roadmap for Jira API - External Documentation",
+        "url": "http://localhost/todo"
+    }
+}

@@ -1,0 +1,30 @@
+.image-container {
+    text-align: center;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.image-a {
+    position: absolute;
+    top: 20%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+}
+
+.image-b {
+    width: 50%;
+    height: 50%;
+}
+
+.help-box {
+    margin: 25px 0px 25px 0px;
+}
+
+.help-box-img {
+    width: 50%;
+    height: 50%;
+}
+
+.help-box-center {
+    text-align: center;
+}

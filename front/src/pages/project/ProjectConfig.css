@@ -1,0 +1,14 @@
+.project-margim {
+    margin: 20px 80px 10px 80px;
+}
+
+.project-grid-btn {
+    padding-left: 8px !important;
+    padding-right: 3px !important;
+    margin-right: 2px;
+    width: 32px;
+}
+
+.project-grid-row {
+    align-content: center;
+}

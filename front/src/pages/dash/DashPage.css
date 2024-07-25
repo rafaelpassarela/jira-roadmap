@@ -1,0 +1,36 @@
+.dash-button-margin {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.dash-button-back {
+    text-align: right;
+}
+
+.dash-filter-size {
+    margin-left: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-width: 100%;
+    align-content: center;
+}
+
+.dash-filter-align {
+    align-content: center;
+}
+
+.dash-filter-margin {
+    margin-right: 10px;
+}
+
+.dash-tr-center {
+    vertical-align: middle;
+}
+
+.dash-warning {
+    color: darkorange;
+}
+
+.dash-shared {
+    color: cornflowerblue;
+    margin-left: 5px;
+}

@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  front_roadmap:
+    image: roadmap_front
+    build:
+      context: .
+      dockerfile: ./Dockerfile_front
+    container_name: roadmap_front
+    # command: bash -c "chmod 777 -R storage/ && chmod +x composer.load.sh && ./composer.load.sh && php artisan migrate && php-fpm"
+    restart: always
+    networks:
+      - roadmap
+    volumes:
+      - ./front:/app
+      - ./.env:/app/.env
+      - ./api/storage/api-docs:/app/api-docs
+    working_dir: /app
+    ports:
+      - "80:3000"
+      - "3000:3000"
+    env_file:
+      - ./.env
+    depends_on:
+      - php
+    links:
+      - php
+
+  php:
+    image: roadmap_php
+    build:
+      context: .
+      dockerfile: ./Dockerfile_api
+    container_name: roadmap_php_fpm
+    command: bash -c "chmod 777 -R storage/ && chmod +x composer.load.sh && ./composer.load.sh && php artisan migrate && php-fpm"
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      WAIT_HOSTS: mysql:3306
+    ports:
+      - "9000:9000"
+    networks:
+      - roadmap
+    volumes:
+      - ./api:/www
+      - ./api/storage/logs:/var/log
+      - ./.env:/www/.env
+    working_dir: /www
+
+volumes:
+  mysql_data:
+
+networks:
+  roadmap:
+
+secrets:
+  db_password:
+    file: db_password.txt
+  db_user:
+    file: db_user.txt

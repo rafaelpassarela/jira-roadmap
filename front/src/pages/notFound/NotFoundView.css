@@ -1,0 +1,13 @@
+.not-found-img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    box-shadow: 0 0 10px var(--bg-color);
+    padding: 3px;
+    margin: 15px;
+}
+
+.not-found-btn-padding {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}

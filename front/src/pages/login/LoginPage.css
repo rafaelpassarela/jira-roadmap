@@ -1,0 +1,67 @@
+.login-padding {
+    padding-top: 20px;
+}
+
+.login-frames {
+    min-width: 630px;
+}
+
+.login-code-error {
+    padding-top: 20px;
+    line-height: 35px;
+    font-size: 14px;
+    min-width: 620px;
+}
+
+.login-error-simple {
+    font-size: 13px;
+    color: red;
+}
+
+/* ----------------- */
+.login-perfil-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-font-14 {
+    font-size: 14px;
+}
+
+.login-waiting-center {
+    text-align: center;
+}
+
+.login-avatar {
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Ajuste a opacidade conforme necessário */
+}
+
+.login-avatar-size {
+    width: 48px;
+    height: 48px;
+}
+
+.login-infouser {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.login-username {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.login-useremail {
+    color: #555;
+    font-size: 14px;
+}
+
+.login-mens-code {
+    font-size: 13px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+/* ------------- */
